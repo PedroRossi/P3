@@ -29,6 +29,13 @@ class HistoryFragment : Fragment() {
         items.add(Item("test_1", "test longo a"))
         items.add(Item("test_2", "test longo b"))
         items.add(Item("test_3", "test longo c"))
+        items.add(Item("test_4", "test longo d"))
+        items.add(Item("test_5", "test longo e"))
+        items.add(Item("test_6", "test longo f"))
+        items.add(Item("test_7", "test longo j"))
+        items.add(Item("test_8", "test longo k"))
+        items.add(Item("test_9", "test longo l"))
+        items.add(Item("test_10", "test longo m"))
         history?.apply {
             layoutManager = LinearLayoutManager(super.getContext())
             addItemDecoration(
