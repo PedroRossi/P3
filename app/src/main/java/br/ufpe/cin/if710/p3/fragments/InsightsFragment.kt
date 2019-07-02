@@ -7,16 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import br.ufpe.cin.if710.p3.R
 
-class HistoryFragment : Fragment() {
+class InsightsFragment  : Fragment() {
 
     companion object {
-        fun newInstance(): HistoryFragment {
-            return HistoryFragment()
+        fun newInstance(): InsightsFragment {
+            return InsightsFragment()
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.history, container, false)
+        return inflater.inflate(R.layout.insights, container, false)
     }
-
 }
