@@ -9,8 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import br.ufpe.cin.if710.p3.R
-import br.ufpe.cin.if710.p3.adapters.ItemsAdapter
-import br.ufpe.cin.if710.p3.models.Item
+import br.ufpe.cin.if710.p3.adapters.HistoryItemsAdapter
+import br.ufpe.cin.if710.p3.models.HistoryItem
 
 class HistoryFragment : Fragment() {
 
@@ -25,24 +25,23 @@ class HistoryFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.history, container, false)
         history = view.findViewById(R.id.history_items)
-        val items = ArrayList<Item>()
-        items.add(Item("test_1", "test longo a"))
-        items.add(Item("test_2", "test longo b"))
-        items.add(Item("test_3", "test longo c"))
-        items.add(Item("test_4", "test longo d"))
-        items.add(Item("test_5", "test longo e"))
-        items.add(Item("test_6", "test longo f"))
-        items.add(Item("test_7", "test longo j"))
-        items.add(Item("test_8", "test longo k"))
-        items.add(Item("test_9", "test longo l"))
-        items.add(Item("test_10", "test longo m"))
+        val items = ArrayList<HistoryItem>()
+        items.add(HistoryItem("test_1", "test longo a", 1))
+        items.add(HistoryItem("test_2", "test longo b", 2))
+        items.add(HistoryItem("test_3", "test longo c", 3))
+        items.add(HistoryItem("test_4", "test longo d", 4))
+        items.add(HistoryItem("test_5", "test longo e", 5))
+        items.add(HistoryItem("test_6", "test longo f", 6))
+        items.add(HistoryItem("test_7", "test longo j", 7))
+        items.add(HistoryItem("test_8", "test longo k", 8))
+        items.add(HistoryItem("test_9", "test longo l", 9))
+        items.add(HistoryItem("test_10", "test longo m", 10))
         history?.apply {
             layoutManager = LinearLayoutManager(super.getContext())
             addItemDecoration(
                 DividerItemDecoration(super.getContext(), DividerItemDecoration.VERTICAL)
             )
-            adapter = ItemsAdapter(layoutInflater).apply {
-                print(items)
+            adapter = HistoryItemsAdapter(layoutInflater).apply {
                 submitList(items)
             }
         }

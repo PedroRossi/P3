@@ -1,5 +1,8 @@
 package br.ufpe.cin.if710.p3.views
 
+import android.app.Activity
+import android.support.v4.app.FragmentManager
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
@@ -15,6 +18,8 @@ class ItemViewHolder(val row: View) : RecyclerView.ViewHolder(row) {
         description.text = item.description
         row.setOnClickListener {
             // do stuff
+            // val manager : FragmentManager
+
         }
     }
 }
