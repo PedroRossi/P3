@@ -9,25 +9,37 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import br.ufpe.cin.if710.p3.R
-import br.ufpe.cin.if710.p3.adapters.HistoryItemsAdapter
+import br.ufpe.cin.if710.p3.adapters.MealsAdapter
 import br.ufpe.cin.if710.p3.database.models.Meal
+import br.ufpe.cin.if710.p3.utils.DB
+import br.ufpe.cin.if710.p3.utils.DoAsync
 
-class HistoryFragment : Fragment() {
+class MealsFragment : Fragment() {
 
-    private var history: RecyclerView? = null
+    private var meals: RecyclerView? = null
+    private var myAdapter: MealsAdapter? = null
 
     companion object {
-        fun newInstance() = HistoryFragment()
+        fun newInstance() = MealsFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.history, container, false)
-        history = view.findViewById(R.id.history_items)
-        val items = ArrayList<Meal>()
-        val ref: FragmentActivity = this.activity!!
-        items.add(Meal(1, "test_1", "test longo a"))
-        history?.apply {
+        meals = view.findViewById(R.id.meals_items)
+        this.activity?.apply {
+            myAdapter = MealsAdapter(layoutInflater, this)
+        }
+        val db = DB.getInstance(this.context!!.applicationContext).appDatabase!!
+        val dao = db.mealDao()
+        val items = dao.getAll()
+        items.observe(this, Observer {
+            myAdapter?.apply {
+                setMeals(it)
+            }
+        })
+        meals?.apply {
             layoutManager = LinearLayoutManager(super.getContext())
             addItemDecoration(
                 DividerItemDecoration(
@@ -35,9 +47,7 @@ class HistoryFragment : Fragment() {
                     DividerItemDecoration.VERTICAL
                 )
             )
-            adapter = HistoryItemsAdapter(layoutInflater, ref).apply {
-                submitList(items)
-            }
+            adapter = myAdapter
         }
         return view
     }

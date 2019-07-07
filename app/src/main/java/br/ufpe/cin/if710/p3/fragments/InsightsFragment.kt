@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import br.ufpe.cin.if710.p3.R
-import br.ufpe.cin.if710.p3.adapters.InsightItemsAdapter
+import br.ufpe.cin.if710.p3.adapters.InsightsAdapter
 import br.ufpe.cin.if710.p3.database.models.Insight
 import br.ufpe.cin.if710.p3.utils.DB
 import br.ufpe.cin.if710.p3.utils.DoAsync
@@ -18,7 +18,7 @@ import br.ufpe.cin.if710.p3.utils.DoAsync
 class InsightsFragment : Fragment() {
 
     private var insights : RecyclerView? = null
-    private var myAdapter : InsightItemsAdapter? = null
+    private var myAdapter : InsightsAdapter? = null
 
     companion object {
         fun newInstance() = InsightsFragment()
@@ -27,14 +27,11 @@ class InsightsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.insights, container, false)
         insights = view.findViewById(R.id.insights_items)
-        myAdapter = InsightItemsAdapter(layoutInflater)
-        val db = DB.getInstance(this.context!!.applicationContext, "p3").appDatabase!!
+        myAdapter = InsightsAdapter(layoutInflater)
+        val db = DB.getInstance(this.context!!.applicationContext).appDatabase!!
         val dao = db.insightDao()
-        DoAsync {
-            dao.insert(Insight(2, "Um Rango Legal", "Carne mal passada"))
-        }//.execute()
         val items = dao.getAll()
-        items.observe(this, Observer { it ->
+        items.observe(this, Observer {
             myAdapter?.apply {
                 setInsights(it)
             }
@@ -45,12 +42,6 @@ class InsightsFragment : Fragment() {
                 DividerItemDecoration(
                     super.getContext(),
                     DividerItemDecoration.VERTICAL
-                )
-            )
-            addItemDecoration(
-                DividerItemDecoration(
-                    super.getContext(),
-                    DividerItemDecoration.HORIZONTAL
                 )
             )
             adapter = myAdapter

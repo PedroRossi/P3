@@ -23,6 +23,7 @@ class MealDetailsFragment : androidx.fragment.app.Fragment() {
         val view = inflater.inflate(R.layout.meal, container, false)
         view.foodTitle.text = item.title
         view.foodDescription.text = item.description
+        // get timestamp and photoURI from item also
         return view
     }
 }

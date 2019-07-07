@@ -7,13 +7,13 @@ import br.ufpe.cin.if710.p3.R
 import br.ufpe.cin.if710.p3.database.models.Insight
 import br.ufpe.cin.if710.p3.views.InsightItemViewHolder
 
-class InsightItemsAdapter(private val inflater: LayoutInflater) :
+class InsightsAdapter(private val inflater: LayoutInflater) :
     RecyclerView.Adapter<InsightItemViewHolder>() {
 
     private var insights = emptyList<Insight>()
 
     fun setInsights(data : List<Insight>) {
-        this.insights = data
+        insights = data
         notifyDataSetChanged()
     }
 

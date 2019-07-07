@@ -7,10 +7,9 @@ import android.os.Environment
 import android.provider.MediaStore
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.core.content.FileProvider
 import br.ufpe.cin.if710.p3.fragments.InsightsFragment
-import br.ufpe.cin.if710.p3.fragments.HistoryFragment
+import br.ufpe.cin.if710.p3.fragments.MealsFragment
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -19,12 +18,12 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val history = HistoryFragment.newInstance()
+    private val meals = MealsFragment.newInstance()
     private val insights = InsightsFragment.newInstance()
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_history -> {
-                this.openFragment(this.history)
+                this.openFragment(this.meals)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_camera -> {
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
-        this.openFragment(this.history)
+        this.openFragment(this.meals)
     }
 
     @Throws(IOException::class)
@@ -83,6 +82,7 @@ class MainActivity : AppCompatActivity() {
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     startActivityForResult(takePictureIntent, 1)
+
                 }
             }
         }
