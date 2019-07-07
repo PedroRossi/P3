@@ -1,4 +1,4 @@
-package br.ufpe.cin.if710.p3.models
+package br.ufpe.cin.if710.p3.database.models
 
 interface Item {
     val title: String

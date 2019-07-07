@@ -1,33 +1,43 @@
 package br.ufpe.cin.if710.p3.adapters
 
-import android.support.v7.recyclerview.extensions.ListAdapter
-import android.support.v7.util.DiffUtil
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import br.ufpe.cin.if710.p3.R
-import br.ufpe.cin.if710.p3.models.HistoryItem
-import br.ufpe.cin.if710.p3.views.ItemViewHolder
+import br.ufpe.cin.if710.p3.fragments.MealDetailsFragment
+import br.ufpe.cin.if710.p3.database.models.Meal
+import br.ufpe.cin.if710.p3.views.HistoryItemViewHolder
 
-class HistoryItemsAdapter(private val inflater: LayoutInflater) :
-    ListAdapter<HistoryItem, ItemViewHolder>(ItemDiffer) {
+class HistoryItemsAdapter(private val inflater: LayoutInflater, private val activity: FragmentActivity) :
+    ListAdapter<Meal, HistoryItemViewHolder>(ItemDiffer) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ItemViewHolder {
-        return ItemViewHolder(inflater.inflate(R.layout.item, parent, false))
+    ): HistoryItemViewHolder {
+        return HistoryItemViewHolder(inflater.inflate(R.layout.item, parent, false))
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bindTo(getItem(position))
+    override fun onBindViewHolder(holder: HistoryItemViewHolder, position: Int) {
+        val item = getItem(position)
+        holder.bindTo(item)
+        holder.row.setOnClickListener {
+            val fragment = MealDetailsFragment.newInstance(item)
+            activity.supportFragmentManager.beginTransaction()
+                .replace(R.id.frame, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
-    private object ItemDiffer : DiffUtil.ItemCallback<HistoryItem>() {
-        override fun areItemsTheSame(p0: HistoryItem, p1: HistoryItem): Boolean {
+    private object ItemDiffer : DiffUtil.ItemCallback<Meal>() {
+        override fun areItemsTheSame(p0: Meal, p1: Meal): Boolean {
             return p0.id == p1.id
         }
 
-        override fun areContentsTheSame(p0: HistoryItem, p1: HistoryItem): Boolean {
+        override fun areContentsTheSame(p0: Meal, p1: Meal): Boolean {
             return p0.description == p1.description
         }
     }
