@@ -1,13 +1,19 @@
 package br.ufpe.cin.if710.p3
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import br.ufpe.cin.if710.p3.fragments.AddMealFragment
 import br.ufpe.cin.if710.p3.fragments.InsightsFragment
 import br.ufpe.cin.if710.p3.fragments.MealsFragment
 import java.io.File
@@ -18,8 +24,14 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val CAMERA_PERMISSION_REQUEST = 100
+    private val TAKE_PHOTO_PERMISSION_REQUEST = 101
+
     private val meals = MealsFragment.newInstance()
     private val insights = InsightsFragment.newInstance()
+
+    private var photoURI: Uri? = null
+
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_history -> {
@@ -27,8 +39,8 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_camera -> {
-                this.dispatchTakePictureIntent()
-                return@OnNavigationItemSelectedListener false
+                this.dispatchIfAllowedIfNotAsk()
+                return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_insights -> {
                 this.openFragment(this.insights)
@@ -65,26 +77,53 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    private fun dispatchIfAllowedIfNotAsk() {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST);
+        } else {
+            dispatchTakePictureIntent()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            CAMERA_PERMISSION_REQUEST -> {
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    dispatchTakePictureIntent()
+                }
+            }
+        }
+    }
+
     private fun dispatchTakePictureIntent() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE)?.also { takePictureIntent ->
             takePictureIntent.resolveActivity(this.packageManager)?.also {
                 val photoFile: File? = try {
                     createImageFile()
                 } catch (ex: IOException) {
-                    // Error occurred while creating the File
                     null
                 }
-                // Continue only if the File was successfully created
                 photoFile?.also {
-                    print(photoFile.absolutePath)
-                    val photoURI: Uri = FileProvider.getUriForFile(
-                        this, "br.ufpe.cin.if710.p3", it
+                    photoURI = FileProvider.getUriForFile(
+                        this, "br.ufpe.cin.if710.p3", photoFile
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, 1)
-
+                    startActivityForResult(takePictureIntent, TAKE_PHOTO_PERMISSION_REQUEST)
                 }
             }
+        }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == TAKE_PHOTO_PERMISSION_REQUEST && resultCode == RESULT_OK) {
+            this.openFragment(AddMealFragment.newInstance(photoURI!!))
         }
     }
 }

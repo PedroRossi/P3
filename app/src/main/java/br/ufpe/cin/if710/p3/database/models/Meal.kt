@@ -9,6 +9,7 @@ data class Meal(
     @PrimaryKey val id: Int,
     @ColumnInfo(name = "title") override val title: String,
     @ColumnInfo(name = "description") override val description: String,
+    //@ColumnInfo(name = "timestamp") val timestamp: String,
     @ColumnInfo(name = "photo") val imagePath: String
 ) : Item {
     override fun toString(): String {
