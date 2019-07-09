@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.ufpe.cin.if710.p3.R
 import br.ufpe.cin.if710.p3.database.models.Insight
-import br.ufpe.cin.if710.p3.views.InsightItemViewHolder
+import br.ufpe.cin.if710.p3.views.InsightViewHolder
 
 class InsightsAdapter(private val inflater: LayoutInflater) :
-    RecyclerView.Adapter<InsightItemViewHolder>() {
+    RecyclerView.Adapter<InsightViewHolder>() {
 
     private var insights = emptyList<Insight>()
 
@@ -20,11 +20,11 @@ class InsightsAdapter(private val inflater: LayoutInflater) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): InsightItemViewHolder {
-        return InsightItemViewHolder(inflater.inflate(R.layout.item, parent, false))
+    ): InsightViewHolder {
+        return InsightViewHolder(inflater.inflate(R.layout.item, parent, false))
     }
 
-    override fun onBindViewHolder(holder: InsightItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: InsightViewHolder, position: Int) {
         holder.bindTo(this.insights.get(position))
     }
 

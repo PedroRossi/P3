@@ -16,6 +16,7 @@ import androidx.core.content.FileProvider
 import br.ufpe.cin.if710.p3.fragments.AddMealFragment
 import br.ufpe.cin.if710.p3.fragments.InsightsFragment
 import br.ufpe.cin.if710.p3.fragments.MealsFragment
+import br.ufpe.cin.if710.p3.utils.DB
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -24,13 +25,15 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    private var navView: BottomNavigationView? = null
+
     private val CAMERA_PERMISSION_REQUEST = 100
     private val TAKE_PHOTO_PERMISSION_REQUEST = 101
 
     private val meals = MealsFragment.newInstance()
     private val insights = InsightsFragment.newInstance()
 
-    private var photoURI: Uri? = null
+    private var photoPath: String? = null
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -60,9 +63,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        navView = findViewById(R.id.nav_view)
+        navView!!.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         this.openFragment(this.meals)
+        DB.getInstance(this) // instance first db
     }
 
     @Throws(IOException::class)
@@ -109,7 +113,8 @@ class MainActivity : AppCompatActivity() {
                     null
                 }
                 photoFile?.also {
-                    photoURI = FileProvider.getUriForFile(
+                    photoPath = photoFile.absolutePath
+                    val photoURI = FileProvider.getUriForFile(
                         this, "br.ufpe.cin.if710.p3", photoFile
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
@@ -123,7 +128,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == TAKE_PHOTO_PERMISSION_REQUEST && resultCode == RESULT_OK) {
-            this.openFragment(AddMealFragment.newInstance(photoURI!!))
+            this.openFragment(AddMealFragment.newInstance(photoPath!!, navView!!))
         }
     }
 }

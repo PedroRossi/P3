@@ -31,7 +31,7 @@ class MealsFragment : Fragment() {
         this.activity?.apply {
             myAdapter = MealsAdapter(layoutInflater, this)
         }
-        val db = DB.getInstance(this.context!!.applicationContext).appDatabase!!
+        val db = DB.getInstance(this.context!!).appDatabase!!
         val dao = db.mealDao()
         val items = dao.getAll()
         items.observe(this, Observer {

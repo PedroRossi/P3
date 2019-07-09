@@ -12,8 +12,10 @@ import androidx.lifecycle.Observer
 import br.ufpe.cin.if710.p3.R
 import br.ufpe.cin.if710.p3.adapters.InsightsAdapter
 import br.ufpe.cin.if710.p3.database.models.Insight
+import br.ufpe.cin.if710.p3.utils.API
 import br.ufpe.cin.if710.p3.utils.DB
 import br.ufpe.cin.if710.p3.utils.DoAsync
+import com.android.volley.Response
 
 class InsightsFragment : Fragment() {
 
@@ -30,6 +32,16 @@ class InsightsFragment : Fragment() {
         myAdapter = InsightsAdapter(layoutInflater)
         val db = DB.getInstance(this.context!!.applicationContext).appDatabase!!
         val dao = db.insightDao()
+        val api = API(this.context!!)
+        DoAsync {
+            api.getInsights(Response.Listener {
+                val title = it.getString("title")
+                val description = it.getString("description")
+                dao.insert(Insight(title, description))
+            }, Response.ErrorListener {
+                // ignore if see error
+            })
+        }.execute()
         val items = dao.getAll()
         items.observe(this, Observer {
             myAdapter?.apply {

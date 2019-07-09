@@ -5,25 +5,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import br.ufpe.cin.if710.p3.R
 import br.ufpe.cin.if710.p3.database.models.Meal
 import kotlinx.android.synthetic.main.meal.view.*
 
 class MealDetailsFragment : Fragment() {
 
-    private lateinit var item : Meal
+    private lateinit var meal : Meal
 
     companion object {
-        fun newInstance(itemToBe : Meal) = MealDetailsFragment().apply {
-            item = itemToBe
+        fun newInstance(item : Meal) = MealDetailsFragment().apply {
+            meal = item
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.meal, container, false)
-        view.foodTitle.text = item.title
-        view.foodDescription.text = item.description
-        // get timestamp and photoURI from item also
+        view.findViewById<ImageView>(R.id.img).setImageURI(meal.getPhotoURI())
+        view.title.text = meal.getTitle()
+        view.description.text = meal.description
         return view
     }
 }

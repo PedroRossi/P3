@@ -6,10 +6,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "insights")
 data class Insight(
-    @PrimaryKey val id: Int,
-    @ColumnInfo(name = "title") override val title: String,
-    @ColumnInfo(name = "description") override val description: String
-) : Item {
+    @ColumnInfo(name = "title") val title: String,
+    @ColumnInfo(name = "description") val description: String
+) {
+    @PrimaryKey(autoGenerate = true) var id: Int = 0
+
     override fun toString(): String {
         return this.title + '\n' + this.description
     }

@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import br.ufpe.cin.if710.p3.R
 import br.ufpe.cin.if710.p3.fragments.MealDetailsFragment
 import br.ufpe.cin.if710.p3.database.models.Meal
-import br.ufpe.cin.if710.p3.views.HistoryItemViewHolder
+import br.ufpe.cin.if710.p3.views.MealViewHolder
 
 class MealsAdapter(private val inflater: LayoutInflater, private val activity: FragmentActivity) :
-    RecyclerView.Adapter<HistoryItemViewHolder>() {
+    RecyclerView.Adapter<MealViewHolder>() {
 
     private var meals = emptyList<Meal>()
 
@@ -22,11 +22,11 @@ class MealsAdapter(private val inflater: LayoutInflater, private val activity: F
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): HistoryItemViewHolder {
-        return HistoryItemViewHolder(inflater.inflate(R.layout.item, parent, false))
+    ): MealViewHolder {
+        return MealViewHolder(inflater.inflate(R.layout.item, parent, false))
     }
 
-    override fun onBindViewHolder(holder: HistoryItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MealViewHolder, position: Int) {
         val item = meals.get(position)
         holder.bindTo(item)
         holder.row.setOnClickListener {

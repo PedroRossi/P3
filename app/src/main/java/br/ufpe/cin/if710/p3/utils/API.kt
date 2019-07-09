@@ -10,9 +10,9 @@ import java.io.IOException
 
 class API (val context: Context) {
 
-    private final val baseURL = "http://localhost:8080"
-    private final val mealsPathURL = "/meals"
-    private final val insightsPathURL = "/insights"
+    private val baseURL = "https://healthierlife.herokuapp.com"
+    private val mealsPathURL = "/meals"
+    private val insightsPathURL = "/insights"
     private val queue: RequestQueue = Volley.newRequestQueue(context)
 
     private fun getURL(path: String) : String {
