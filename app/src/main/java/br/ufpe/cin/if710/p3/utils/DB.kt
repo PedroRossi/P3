@@ -13,7 +13,7 @@ class DB {
         fun getInstance(context: Context): DB {
             return INSTANCE?: synchronized(this){
                 var ret = DB()
-                ret.appDatabase = Room.databaseBuilder(context,AppDatabase::class.java, "p3hfdb")
+                ret.appDatabase = Room.databaseBuilder(context,AppDatabase::class.java, "healthier_life")
                     .build()
                 ret.also {
                     INSTANCE = it

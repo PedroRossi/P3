@@ -1,6 +1,7 @@
 package br.ufpe.cin.if710.p3.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,15 +34,17 @@ class InsightsFragment : Fragment() {
         val db = DB.getInstance(this.context!!.applicationContext).appDatabase!!
         val dao = db.insightDao()
         val api = API(this.context!!)
-        DoAsync {
-            api.getInsights(Response.Listener {
-                val title = it.getString("title")
-                val description = it.getString("description")
-                dao.insert(Insight(title, description))
-            }, Response.ErrorListener {
-                // ignore if see error
-            })
-        }.execute()
+        api.getInsights(Response.Listener {
+            val title = it.getString("title")
+            val description = it.getString("description")
+            val insight = Insight(title, description)
+            Log.d("a", insight.toString())
+            DoAsync {
+                dao.insert(insight)
+            }.execute()
+        }, Response.ErrorListener {
+            Log.d("error", it.toString())
+        })
         val items = dao.getAll()
         items.observe(this, Observer {
             myAdapter?.apply {
